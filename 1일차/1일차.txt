@@ -1,0 +1,136 @@
+-WSL 설치
+wsl --install
+
+- rockylinux  다운로드
+www.rockylinux.org
+v8.10
+
+- VirtualBox 다운로드
+www.virtualbox.org
+
+
+--------------------------------------
+- 아이디변경
+
+useradd 아이디
+passwd 아이디
+userdel 아이디
+
+- 사용자추가
+sudo useradd -G sudo -m -d /home/아이디  -s /bin/bash 아이디
+
+- 패스워드 설정
+sudo passwd 아이디
+
+- 사용자변경
+su - 아이디
+패스워드
+
+----------------------------------------------------------------
+- openssh-server 프로그램 설치
+
+sudo apt update
+sudo apt remove openssh-server
+sudo apt install openssh-server
+
+sudo service ssh start  
+
+sudo service ssh status
+
+- ssh 접속
+
+서버에 openssh 서버 프로그램이 동작중이어야함.
+
+openssh 설정 파일에 패스워드 인증/ 공개키 인증 방식 중에
+현재 우분투는 두 인증 방식 모두 가능.
+
+접속(윈도우) :  ssh 아이디@서버IP주소
+
+cd .ssh 
+del known_hosts
+
+ssh 아이디@서버IP주소
+
+sudo apt install chrony
+
+sudo systemctl restart chrony
+
+sudo apt install ntp
+
+sudo service ntp restart
+
+timedatectl
+
+----------------------------------------------------------------------------------------
+1. 리눅스 배포판 : 커널에 필요한 응응프로그램을 추가하여 패키징한 상태
+                        Redhat, Suse, Debian, Ubuntu, Rocky 등 다양한 배포판 존재.
+
+2. 리눅스 설치 :  1) 베어메탈 서버에 직접 설치
+                       2) Vmware, Virtualbox와 같은 가상화 플램폼에 가상머신 생성후 
+                          설치 - rocky설치
+                       3) WSL(Windows Subsystem for Linux) 기능을 이용해서 설치 - ubuntu 설치
+
+3. 설치된 리눅스에 원격 접속하기
+
+   1) 텔넷, SSH, VNC 등을 이용하여 접속 가능.
+   2) SSH를 이용해서 가장 많이 접속.(openssh)
+      - 패스워드를 이용한 접속 : 사용자의 패스워드를 이용해 접속.
+      - 개인키를 이용한 접속 : 사용자의 개인키를 이용해 접속.  이때 사용자의 공개키가 서버에
+                                       등록돼 있어야 함.(~/.ssh/authorized_keys 파일에 공개키 등록)
+      - 개인키/공개키 생성
+       $ ssh-keygen -t rsa -b 2048
+        => passphrase는 개인키를 보호하기 위한 패스워드. 생략 가능
+
+       $ cd ~/.ssh  => 홈디렉토리에 있는 .ssh 디렉토리로 이동
+       $ ls
+         id_rsa(개인키)   id_rsa.pub(공개키)
+
+       $ cp id_rsa.pub authorized_keys  => 공개키는 authorized_keys파일에 있어야함.(파일 없는 경우)
+       $ cat id_rsa.pub >> authorized_keys => 공개키를 authorized_keys파일에 추가하기.(파일 있는 경우)
+      - 서버에서 키를 생성했다면 개인키를 클라이언트로 가져와야 함. 
+      윈도우)
+       # scp 아이디@서버IP주소:/home/아이디/.ssh/id_rsa  .   => . 은 현재 디렉토리를 나타내는 특수문자
+
+
+   3) ssh 클라이언트 프로그램 이용하여 접속하기
+      1) 패스워드 이용 :  ssh 아이디@서버IP주소
+      2) 개인키 이용 : ssh -i 개인키파일  아이디@서버IP주소 
+
+   4) MobaXterm과 같은 터미널 프로그램(putty, xshell, securecrt 등)을 이용하여 접속하기
+
+4. 우분투에 접속한 후에 가장 먼저 해야할 작업
+
+   $ ip addr   => IP주소 확인
+   
+   $ ping 1.1.1.1 => 외부 통신 테스트
+
+   $ nslookup www.daum.net  => DNS서비스 테스트
+
+   $ sudo apt-get update   => 전체 업데이트 실행.  sudo는 일반사용자가 root의 권한으로  
+                                         프로그램을 실행할 수 있게 하는 명령. sudo를 사용할 수 있는
+                                         사용자로 등록되어 있어야 사용 가능.
+
+
+
+
+
+
+        
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
